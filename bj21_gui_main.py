@@ -58,7 +58,7 @@ class MainWindow(qtw.QMainWindow):
         deck.deal_two(dealer)
         deck.deal_two(human_player)
         self.ui.dealer_card1.setText('CARD HIDDEN')
-        self.ui.dealer_card2.setText(f'{dealer.hand_cards[0]}')
+        self.ui.dealer_card2.setText(f'{dealer.hand_cards[1]}')
         self.ui.player_card1.setText(f'{human_player.hand_cards[0]}')
         self.ui.player_card2.setText(f'{human_player.hand_cards[1]}')
 
@@ -77,9 +77,13 @@ class MainWindow(qtw.QMainWindow):
                       bet_amount and dealer.chips >= bet_amount)
                 self.TABLE_POT += human_player.bet_chips(bet_amount)
                 self.TABLE_POT += dealer.bet_chips(bet_amount)
-                self.ui.pot_total.setText(f'{self.TABLE_POT}')
+                self.ui.pot_total.setText(f'Pot Total: {self.TABLE_POT}')
                 self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
                 self.ui.player_chips.setText(f'Chips: {human_player.chips}')
+                self.ui.player_total.setText(f'Total: {human_player.total()}')
+                self.ui.dealer_total.setText(
+                    f'Total: {dealer.total_visible()}')
+
                 print(f'Table Pot: {self.TABLE_POT}\n')
                 bet = False
                 break
@@ -104,6 +108,7 @@ class MainWindow(qtw.QMainWindow):
                 if hit_me == 'y':
                     # system('clear')
                     deck.deal_one(human_player)
+
                 else:
                     DEALERS_TURN = True
                     break
@@ -271,6 +276,16 @@ class Dealer:
         """ calculates total value of cards in hand. return value."""
         temp_total = 0
         for card3 in self.hand_cards:
+            temp_total += card3.value
+        return temp_total
+
+    def total_visible(self):
+        """ calculates total value of cards visible. return value."""
+        print('Total_visible running...')
+        temp_total = 0
+        print(self.hand_cards[1:])
+        for card3 in self.hand_cards[1:]:
+            print(card3.value)
             temp_total += card3.value
         return temp_total
 
