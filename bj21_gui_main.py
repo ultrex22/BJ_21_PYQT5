@@ -48,34 +48,43 @@ class MainWindow(qtw.QMainWindow):
         deck.shuffle()
         dealer = Dealer()
         human_player = Player(ask_name, self)
+        self.ui.player_name.setText(f"{human_player}'s Cards")
 
-        # main game loop
-        GAME_ON = True
-        while GAME_ON:
+        # deal chips and update gui
+        print(f'{human_player.name} has {human_player.chips} chips.')
+        print(f'Dealer has {dealer.chips} chips.')
+        self.ui.player_chips.setText(f'Chips: {human_player.chips}')
+        self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
+        deck.deal_two(dealer)
+        deck.deal_two(human_player)
+        self.ui.dealer_card1.setText('CARD HIDDEN')
+        self.ui.dealer_card2.setText(f'{dealer.hand_cards[0]}')
+        self.ui.player_card1.setText(f'{human_player.hand_cards[0]}')
+        self.ui.player_card2.setText(f'{human_player.hand_cards[1]}')
 
-            print(f'{human_player.name} has {human_player.chips} chips.')
-            print(f'Dealer has {dealer.chips} chips.')
-            self.ui.player_chips.setText(f'Chips: {human_player.chips}')
-            self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
-            deck.deal_two(dealer)
-            deck.deal_two(human_player)
-            print()
-
-            # request bet, check avail chips
-            while True:
-                try:
-                    bet_amount = int(input('How much do you wish to bet? '))
-                except ValueError:
-                    print('Must be a number.')
-                    continue
-                if human_player.chips >= bet_amount and dealer.chips >= bet_amount:
-                    self.TABLE_POT += human_player.bet_chips(bet_amount)
-                    self.TABLE_POT += dealer.bet_chips(bet_amount)
-                    print(f'Table Pot: {self.TABLE_POT}\n')
-                    break
-
-                print('Not enough chips in one players bank to bet that amount.\n')
+        # request bet, check avail chips
+        bet = True
+        while bet == True:
+            try:
+                bet_amount, bool2 = qtw.QInputDialog.getText(
+                    self, 'Bet', 'How much do you want to bet? ')
+                bet_amount = int(bet_amount)
+            except ValueError:
+                print('Must be a number.')
                 continue
+            if human_player.chips >= bet_amount and dealer.chips >= bet_amount:
+                print(human_player.chips >=
+                      bet_amount and dealer.chips >= bet_amount)
+                self.TABLE_POT += human_player.bet_chips(bet_amount)
+                self.TABLE_POT += dealer.bet_chips(bet_amount)
+                self.ui.pot_total.setText(f'{self.TABLE_POT}')
+                self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
+                self.ui.player_chips.setText(f'Chips: {human_player.chips}')
+                print(f'Table Pot: {self.TABLE_POT}\n')
+                bet = False
+                break
+            else:
+                print('Not enough chips in the bank to bet that amount.\n')
 
         # --- main game loops ---
         # players turn
