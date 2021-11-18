@@ -62,7 +62,7 @@ class MainWindow(qtw.QMainWindow):
         self.ui.player_card1.setText(f'{human_player.hand_cards[0]}')
         self.ui.player_card2.setText(f'{human_player.hand_cards[1]}')
 
-        # request bet, check avail chips
+        # request bet, check avail chips...
         bet = True
         while bet == True:
             try:
