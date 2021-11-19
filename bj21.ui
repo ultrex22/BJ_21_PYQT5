@@ -69,6 +69,7 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>15</pointsize>
+      <underline>true</underline>
      </font>
     </property>
     <property name="styleSheet">
@@ -93,7 +94,9 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>15</pointsize>
-      <underline>false</underline>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
      </font>
     </property>
     <property name="styleSheet">
@@ -325,6 +328,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -355,6 +360,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -385,6 +392,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -415,6 +424,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -445,6 +456,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -475,6 +488,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -535,6 +550,8 @@ color: rgb(54, 54, 54)</string>
     <property name="font">
      <font>
       <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -588,15 +605,15 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_textbox">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>200</y>
+      <x>180</x>
+      <y>160</y>
       <width>181</width>
-      <height>31</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>15</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -605,17 +622,20 @@ color: rgb(54, 54, 54)</string>
      <string notr="true">color:green;</string>
     </property>
     <property name="text">
-     <string>Hit or Hold ?</string>
+     <string>Enter Bet Below...</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QToolButton" name="hit_me">
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>270</y>
+      <y>300</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -635,7 +655,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>310</y>
+      <y>340</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -648,6 +668,22 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="text">
      <string>Hold</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="bet_amount">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>240</y>
+      <width>113</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>Bet $</string>
     </property>
    </widget>
   </widget>
