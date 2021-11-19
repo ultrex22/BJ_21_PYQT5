@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
+    <width>600</width>
     <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>550</width>
+    <width>600</width>
     <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>550</width>
+    <width>600</width>
     <height>600</height>
    </size>
   </property>
@@ -46,7 +46,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>26</pointsize>
+      <pointsize>28</pointsize>
       <italic>true</italic>
      </font>
     </property>
@@ -68,7 +68,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>15</pointsize>
+      <pointsize>12</pointsize>
       <underline>true</underline>
      </font>
     </property>
@@ -85,15 +85,15 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_name">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>180</y>
-      <width>151</width>
-      <height>31</height>
+      <x>400</x>
+      <y>170</y>
+      <width>171</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>15</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
       <underline>true</underline>
@@ -108,12 +108,15 @@ color: rgb(54, 54, 54)</string>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="pot_total">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>390</y>
+      <x>230</x>
+      <y>410</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -147,7 +150,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -177,7 +180,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -207,7 +210,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -237,7 +240,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -267,7 +270,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -319,7 +322,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_total">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>390</x>
       <y>470</y>
       <width>101</width>
       <height>31</height>
@@ -351,7 +354,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_card2">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>420</x>
       <y>280</y>
       <width>140</width>
       <height>25</height>
@@ -359,7 +362,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -383,7 +386,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_card3">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>420</x>
       <y>330</y>
       <width>140</width>
       <height>25</height>
@@ -391,7 +394,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -415,7 +418,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_card1">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>420</x>
       <y>230</y>
       <width>140</width>
       <height>25</height>
@@ -423,7 +426,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -447,7 +450,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_card4">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>420</x>
       <y>380</y>
       <width>140</width>
       <height>25</height>
@@ -455,7 +458,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -479,7 +482,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_card5">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>420</x>
       <y>430</y>
       <width>140</width>
       <height>25</height>
@@ -487,7 +490,7 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -541,7 +544,7 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_chips">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>370</x>
       <y>520</y>
       <width>101</width>
       <height>31</height>
@@ -605,9 +608,9 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="player_textbox">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>200</x>
       <y>160</y>
-      <width>181</width>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -631,11 +634,11 @@ color: rgb(54, 54, 54)</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QToolButton" name="hit_me">
+   <widget class="QToolButton" name="hit_me_button">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>300</y>
+      <x>240</x>
+      <y>320</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -650,12 +653,18 @@ color: rgb(54, 54, 54)</string>
     <property name="text">
      <string>Hit Me!</string>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>16</width>
+      <height>16</height>
+     </size>
+    </property>
    </widget>
-   <widget class="QToolButton" name="hold">
+   <widget class="QToolButton" name="hold_button">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>340</y>
+      <x>240</x>
+      <y>360</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -669,11 +678,17 @@ color: rgb(54, 54, 54)</string>
     <property name="text">
      <string>Hold</string>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>16</width>
+      <height>16</height>
+     </size>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="bet_amount">
+   <widget class="QLineEdit" name="bet_amount_edit">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>240</x>
       <y>240</y>
       <width>113</width>
       <height>32</height>
@@ -684,6 +699,31 @@ color: rgb(54, 54, 54)</string>
     </property>
     <property name="placeholderText">
      <string>Bet $</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="enter_buttton">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>280</y>
+      <width>111</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>ENTER</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>16</width>
+      <height>16</height>
+     </size>
     </property>
    </widget>
   </widget>

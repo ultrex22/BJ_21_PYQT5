@@ -44,128 +44,114 @@ class MainWindow(qtw.QMainWindow):
             self, 'Welcome!', 'Welcome to Black Jack 21!\nEnter your name Player: ')
 
         # Setup deck,hands
-        deck = Deck(self)
-        deck.shuffle()
-        dealer = Dealer()
-        human_player = Player(ask_name, self)
-        self.ui.player_name.setText(f"{human_player}'s Cards")
+        self.deck = Deck(self)
+        self.deck.shuffle()
+        self.dealer = Dealer()
+        self.human_player = Player(ask_name, self)
+        self.ui.player_name.setText(f"{self.human_player}'s Cards")
 
         # deal chips and update gui
-        print(f'{human_player.name} has {human_player.chips} chips.')
-        print(f'Dealer has {dealer.chips} chips.')
-        self.ui.player_chips.setText(f'Chips: {human_player.chips}')
-        self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
-        deck.deal_two(dealer)
-        deck.deal_two(human_player)
+        print(f'{self.human_player.name} has {self.human_player.chips} chips.')
+        print(f'Dealer has {self.dealer.chips} chips.')
+        self.ui.player_chips.setText(f'Chips: {self.human_player.chips}')
+        self.ui.dealer_chips.setText(f'Chips: {self.dealer.chips}')
+        self.deck.deal_two(self.dealer)
+        self.deck.deal_two(self.human_player)
         self.ui.dealer_card1.setText('CARD HIDDEN')
-        self.ui.dealer_card2.setText(f'{dealer.hand_cards[1]}')
-        self.ui.player_card1.setText(f'{human_player.hand_cards[0]}')
-        self.ui.player_card2.setText(f'{human_player.hand_cards[1]}')
+        self.ui.dealer_card2.setText(f'{self.dealer.hand_cards[1]}')
+        self.ui.player_card1.setText(f'{self.human_player.hand_cards[0]}')
+        self.ui.player_card2.setText(f'{self.human_player.hand_cards[1]}')
 
         # request bet, check avail chips...
-        bet = True
-        while bet == True:
-            try:
-                bet_amount, bool2 = qtw.QInputDialog.getText(
-                    self, 'Bet', 'How much do you want to bet? ')
-                bet_amount = int(bet_amount)
-            except ValueError:
-                print('Must be a number.')
-                continue
-            if human_player.chips >= bet_amount and dealer.chips >= bet_amount:
-                print(human_player.chips >=
-                      bet_amount and dealer.chips >= bet_amount)
-                self.TABLE_POT += human_player.bet_chips(bet_amount)
-                self.TABLE_POT += dealer.bet_chips(bet_amount)
+        self.ui.enter_buttton.clicked.connect(self.make_bet)
+
+    def make_bet(self):
+
+        try:
+            bet_amount = int(self.ui.bet_amount_edit.text())
+            self.ui.player_textbox.setText('Enter Bet Amount ...')
+            if self.human_player.chips >= bet_amount and self.dealer.chips >= bet_amount:
+                print(self.human_player.chips >=
+                      bet_amount and self.dealer.chips >= bet_amount)
+                self.TABLE_POT += self.human_player.bet_chips(bet_amount)
+                self.TABLE_POT += self.dealer.bet_chips(bet_amount)
                 self.ui.pot_total.setText(f'Pot Total: {self.TABLE_POT}')
-                self.ui.dealer_chips.setText(f'Chips: {dealer.chips}')
-                self.ui.player_chips.setText(f'Chips: {human_player.chips}')
-                self.ui.player_total.setText(f'Total: {human_player.total()}')
+                self.ui.dealer_chips.setText(f'Chips: {self.dealer.chips}')
+                self.ui.player_chips.setText(
+                    f'Chips: {self.human_player.chips}')
+                self.ui.player_total.setText(
+                    f'Total: {self.human_player.total()}')
                 self.ui.dealer_total.setText(
-                    f'Total: {dealer.total_visible()}')
+                    f'Total: {self.dealer.total_visible()}')
 
                 print(f'Table Pot: {self.TABLE_POT}\n')
-                bet = False
-                break
+                self.ui.bet_amount_edit.setVisible(False)
+                self.ui.enter_buttton.setVisible(False)
+                self.ui.player_textbox.setText('Hit or Hold?')
             else:
-                print('Not enough chips in the bank to bet that amount.\n')
+                self.ui.player_textbox.setText(
+                    'Not enough chips in the bank, try again.')
+        except ValueError:
+            self.ui.player_textbox.setText('Must be a number, try again.')
 
-        # --- main game loops ---
-        # players turn
-        PLAYERS_TURN = True
-        while PLAYERS_TURN:
+    def stay(self):
+        pass
+    # dealer actions now...
+     # # sub loop, dealers turn, keep adding cards if total cards < 17
+        # while DEALERS_TURN and self.dealer.total() < 17:
+        #     if not self.dealer.bust():
+        #         print('--------------------')
+        #         self.deck.deal_one(self.dealer)
+        #         print(f'Dealers Cards: {self.dealer.hand_cards[0]}.')
+        #         for card4 in self.dealer.hand_cards[2:]:
+        #             print(f'Dealers Cards: {card4}.')
+        #     elif self.dealer.bust():
+        #         print('DEALER BUSTS!')
+        #         DEALERS_TURN = False
 
-            # print cards in hands
-            print(f'Dealers Face Card: {dealer.hand_cards[0]}.')
-            print('--------------------')
-            print(f"\n{human_player.name}'s Hand:",
-                  *human_player.hand_cards, sep="\n ")
-            print(f'{human_player.name} Cards Total: {human_player.total()}')
-            # see if player wants another card , check for bust.
-            if not human_player.bust():
-                hit_me = input(
-                    'Do you want to Hit and take another card (y/n) ? \n').lower()
-                if hit_me == 'y':
-                    # system('clear')
-                    deck.deal_one(human_player)
+    def hit_me(self):
+        if not self.human_player.bust():
+            self.deck.deal_one(self.human_player)
+        elif self.human_player.bust():
+            print(f'{self.human_player.name} BUSTS!')
 
-                else:
-                    DEALERS_TURN = True
-                    break
-            elif human_player.bust():
-                print(f'{human_player.name} BUSTS!')
-                DEALERS_TURN = False
-                PLAYERS_TURN = False
+        # # determine winner, add chips to players total
+        # print('--------------------')
+        # print(f'Dealer Total: {self.dealer.total()}')
+        # print(f'Player Total: {self.human_player.total()}')
+        # print('--------------------')
+        # if self.dealer.bust():
+        #     print(f'{self.human_player.name} wins!!!')
+        #     self.human_player.add_chips(self.TABLE_POT)
+        # elif self.human_player.bust():
+        #     print('Dealer Wins!!!')
+        #     self.dealer.add_chips(self.TABLE_POT)
+        # elif self.dealer.total() == self.human_player.total():
+        #     print('TIE !!!')
+        # elif self.dealer.total() > self.human_player.total():
+        #     print('Dealer Wins!!!')
+        #     self.dealer.add_chips(self.TABLE_POT)
+        # elif self.dealer.total() < self.human_player.total():
+        #     print(f'{self.human_player.name} wins!!!')
+        #     self.human_player.add_chips(self.TABLE_POT)
 
-        # sub loop, dealers turn, keep adding cards if total cards < 17
-        while DEALERS_TURN and dealer.total() < 17:
-            if not dealer.bust():
-                print('--------------------')
-                deck.deal_one(dealer)
-                print(f'Dealers Cards: {dealer.hand_cards[0]}.')
-                for card4 in dealer.hand_cards[2:]:
-                    print(f'Dealers Cards: {card4}.')
-            elif dealer.bust():
-                print('DEALER BUSTS!')
-                DEALERS_TURN = False
+        # # replay
+        # if self.human_player.chips == 0 or self.dealer.chips == 0:
+        #     print('One player out of chips, GAME OVER.')
+        #     print('\nGoodbye!')
+        #     GAME_ON = False
 
-        # determine winner, add chips to players total
-        print('--------------------')
-        print(f'Dealer Total: {dealer.total()}')
-        print(f'Player Total: {human_player.total()}')
-        print('--------------------')
-        if dealer.bust():
-            print(f'{human_player.name} wins!!!')
-            human_player.add_chips(self.TABLE_POT)
-        elif human_player.bust():
-            print('Dealer Wins!!!')
-            dealer.add_chips(self.TABLE_POT)
-        elif dealer.total() == human_player.total():
-            print('TIE !!!')
-        elif dealer.total() > human_player.total():
-            print('Dealer Wins!!!')
-            dealer.add_chips(self.TABLE_POT)
-        elif dealer.total() < human_player.total():
-            print(f'{human_player.name} wins!!!')
-            human_player.add_chips(self.TABLE_POT)
+        # again = input('\nPlay again? (y/n) ')
+        # if again == 'y':
+        #     self.deck.all_cards.extend(self.dealer.hand_cards)
+        #     self.deck.all_cards.extend(self.human_player.hand_cards)
+        #     self.dealer.hand_cards.clear()
+        #     self.human_player.hand_cards.clear()
+        #     self.TABLE_POT = 0
+        #     # system('clear')
+        #     # continue
 
-        # replay
-        if human_player.chips == 0 or dealer.chips == 0:
-            print('One player out of chips, GAME OVER.')
-            print('\nGoodbye!')
-            GAME_ON = False
-
-        again = input('\nPlay again? (y/n) ')
-        if again == 'y':
-            deck.all_cards.extend(dealer.hand_cards)
-            deck.all_cards.extend(human_player.hand_cards)
-            dealer.hand_cards.clear()
-            human_player.hand_cards.clear()
-            self.TABLE_POT = 0
-            # system('clear')
-            # continue
-
-        print('\nGoodbye!')
+        # print('\nGoodbye!')
 
 
 class Card():
