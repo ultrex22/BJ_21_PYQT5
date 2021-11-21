@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>600</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>600</width>
-    <height>600</height>
+    <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>600</width>
-    <height>600</height>
+    <height>700</height>
    </size>
   </property>
   <property name="font">
@@ -116,7 +116,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>410</y>
+      <y>470</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -292,9 +292,9 @@ color: rgb(54, 54, 54)</string>
    <widget class="QLabel" name="dealer_total">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>470</y>
-      <width>101</width>
+      <x>70</x>
+      <y>550</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -313,7 +313,7 @@ color: rgb(54, 54, 54)</string>
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Total: 0</string>
+     <string>Cards Total: 0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -323,8 +323,8 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>470</y>
-      <width>101</width>
+      <y>550</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -345,7 +345,7 @@ color: rgb(54, 54, 54)</string>
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Total: 0</string>
+     <string>Cards Total: 0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -515,7 +515,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>520</y>
+      <y>600</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -545,7 +545,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>520</y>
+      <y>600</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -638,7 +638,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>320</y>
+      <y>350</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -664,7 +664,7 @@ color: rgb(54, 54, 54)</string>
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>360</y>
+      <y>390</y>
       <width>111</width>
       <height>34</height>
      </rect>
@@ -724,6 +724,70 @@ color: rgb(54, 54, 54)</string>
       <width>16</width>
       <height>16</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="player_card6">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>480</y>
+      <width>140</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::WinPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="dealer_card6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>480</y>
+      <width>140</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::WinPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
