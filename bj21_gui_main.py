@@ -9,6 +9,8 @@ from PyQt5 import QtTest
 
 
 class MainWindow(qtw.QMainWindow):
+    # or whatever number not already taken--needed for app restart
+    EXIT_CODE_REBOOT = -12345678
 
     def __init__(self, *args, **kwargs):
 
@@ -18,15 +20,6 @@ class MainWindow(qtw.QMainWindow):
 
         # calling method from class above, from login.ui
         self.ui.setupUi(self)
-
-        # constants for card suits and ranks , obv.
-        self.SUITS = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
-        self.RANKS = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
-                      'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
-        self.VALUES = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7,
-                       'Eight': 8, 'Nine': 9, 'Ten': 10, 'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
-        self.TABLE_POT = 0
-        self.next_card_slot_idx = 2
 
         # center app/ widget
         qr = self.frameGeometry()
@@ -40,6 +33,17 @@ class MainWindow(qtw.QMainWindow):
         self.ui.icon2.setIcon(qtg.QIcon('ace2.png'))
         self.ui.icon2.setIconSize(qtc.QSize(80, 81))
         self.show()
+        self.play()
+
+    def play(self):
+        # constants for card suits and ranks , obv.
+        self.SUITS = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
+        self.RANKS = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
+                      'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+        self.VALUES = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7,
+                       'Eight': 8, 'Nine': 9, 'Ten': 10, 'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
+        self.TABLE_POT = 0
+        self.next_card_slot_idx = 2
 
         # get username
         ask_name, bool1 = qtw.QInputDialog.getText(
@@ -123,7 +127,7 @@ class MainWindow(qtw.QMainWindow):
             self.ui.player_total.setText(
                 f'Total: {self.human_player.total()}')
             # self.ui.player_textbox.setText('Player Busts!!\nGame Over!')
-            self.winner_is()
+            self.hold()
 
     def hold(self):
         # sub loop, dealers turn, keep adding cards if total cards < 17
@@ -151,8 +155,6 @@ class MainWindow(qtw.QMainWindow):
             if self.dealer.bust():
                 self.ui.dealer_total.setText(
                     f'Total: {self.dealer.total()}')
-                self.ui.player_textbox.setText('Dealer Busts!!\nGame Over!')
-                self.winner_is()
         self.winner_is()
 
     def winner_is(self):
@@ -169,7 +171,8 @@ class MainWindow(qtw.QMainWindow):
             self.ui.player_textbox.setText(
                 f'Dealer Busts.{self.human_player.name} Wins!')
             self.human_player.add_chips(self.TABLE_POT)
-            self.ui.player_chips.setText(f'Chips: {self.human_player.chips}')
+            self.ui.player_chips.setText(
+                f'Chips: {self.human_player.chips}')
             self.ui.pot_total.setText(f'Pot: 0')
         # player busts, add chips to dealer
 
@@ -193,63 +196,37 @@ class MainWindow(qtw.QMainWindow):
 
         # player wins, add chips to player
         elif self.dealer.total() < self.human_player.total():
-            self.ui.player_textbox.setText(f'{self.human_player.name} Wins!')
+            self.ui.player_textbox.setText(
+                f'{self.human_player.name} Wins!')
             self.human_player.add_chips(self.TABLE_POT)
-            self.ui.player_chips.setText(f'Chips: {self.human_player.chips}')
+            self.ui.player_chips.setText(
+                f'Chips: {self.human_player.chips}')
             self.ui.pot_total.setText(f'Pot: 0')
 
-        QtTest.QTest.qWait(5000)
+        QtTest.QTest.qWait(4000)
         if self.human_player.chips == 0 or self.dealer.chips == 0:
             self.ui.player_textbox.setText(
                 'One player out of chips\nGAME OVER.')
-            QtTest.QTest.qWait(8000)
+            QtTest.QTest.qWait(4000)
             app.quit()
-
-        self.ui.player_textbox.setText(' Do you want to\nPlay again?')
-        self.ui.enter_buttton.setText(' ')
-        self.ui.bet_amount_edit.setText(' ')
-        self.ui.hit_me_button.setText(' YES ')
-        self.ui.hit_me_button.setEnabled(True)
-        self.ui.hold_button.setText(' NO ')
-        self.ui.hold_button.setEnabled(True)
-        self.ui.hold_button.clicked.connect(exit)
-        self.ui.hit_me_button.clicked.connect(self.replay)
+        else:
+            self.ui.hit_me_button.setEnabled(True)
+            self.ui.hold_button.setEnabled(True)
+            self.ui.enter_buttton.setText(' ')
+            self.ui.bet_amount_edit.setText(' ')
+            self.ui.player_textbox.setText(' Do you want to\nPlay again?')
+            self.ui.hit_me_button.setText(' YES ')
+            self.ui.hold_button.setText(' NO ')
+            self.ui.hold_button.clicked.connect(exit)
+            self.ui.hit_me_button.clicked.connect(self.replay)
 
     def replay(self):
-        pass
+        app.exit(MainWindow.EXIT_CODE_REBOOT)  # needed for app restart
         # del self.deck
         # del self.dealer
         # del self.human_player
-        
-        # self.TABLE_POT = 0
-        # self.next_card_slot_idx = 2
-        
-        # # get username
-        # ask_name, bool1 = qtw.QInputDialog.getText(
-        #     self, 'Welcome!', 'Welcome to Black Jack 21!\nEnter your name Player: ')
-        
-        # # Setup deck,hands
-        # self.deck = Deck(self)
-        # self.deck.shuffle()
-        # self.dealer = Dealer()
-        # self.human_player = Player(ask_name.title(), self)
-        # self.ui.player_name.setText(f"{self.human_player}'s Cards")
 
-        # # deal chips and first 2 cards
-        # self.ui.player_chips.setText(f'Chips: {self.human_player.chips}')
-        # self.ui.dealer_chips.setText(f'Chips: {self.dealer.chips}')
-        # self.deck.deal_two(self.dealer)
-        # self.deck.deal_two(self.human_player)
-        # self.ui.dealer_card1.setText('CARD HIDDEN')
-        # self.ui.dealer_card2.setText(f'{self.dealer.hand_cards[1]}')
-        # self.ui.player_card1.setText(f'{self.human_player.hand_cards[0]}')
-        # self.ui.player_card2.setText(f'{self.human_player.hand_cards[1]}')
-        # self.ui.player_total.setText(
-        #     f'Total: {self.human_player.total()}')
-        # self.ui.dealer_total.setText(
-        #     f'Total: {self.dealer.total_visible()}')
-        # self.ui.enter_buttton.clicked.connect(self.make_bet)
-        
+        # self.play()
 
 
 class Card():
@@ -370,6 +347,16 @@ class Dealer:
 
 
 if __name__ == '__main__':
-    app = qtw.QApplication(sys.argv)
-    w = MainWindow()
-    sys.exit(app.exec())
+    currentExitCode = MainWindow.EXIT_CODE_REBOOT
+
+    while currentExitCode == MainWindow.EXIT_CODE_REBOOT:
+        app = qtw.QApplication(sys.argv)
+        w = MainWindow()
+        currentExitCode = app.exec_()
+        app = None
+
+    # return currentExitCode
+
+    # app = qtw.QApplication(sys.argv)
+    # w = MainWindow()
+    # sys.exit(app.exec())
