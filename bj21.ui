@@ -40,13 +40,13 @@ color: rgb(54, 54, 54)</string>
      <rect>
       <x>240</x>
       <y>50</y>
-      <width>241</width>
+      <width>261</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>28</pointsize>
+      <pointsize>30</pointsize>
       <italic>true</italic>
      </font>
     </property>
@@ -54,7 +54,7 @@ color: rgb(54, 54, 54)</string>
      <string notr="true">color: rgb(0, 0, 127)</string>
     </property>
     <property name="text">
-     <string>Black Jack 21</string>
+     <string>BlackJack 21</string>
     </property>
    </widget>
    <widget class="QLabel" name="dealer_name">
@@ -535,7 +535,7 @@ color: rgb(54, 54, 54)</string>
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Chips:  100</string>
+     <string>Chips:  0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -567,7 +567,7 @@ color: rgb(54, 54, 54)</string>
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Chips:  100</string>
+     <string>Chips:  0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

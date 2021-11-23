@@ -7,9 +7,17 @@ from PyQt5 import uic
 from bj21_ui import Ui_MainWindow
 from PyQt5 import QtTest
 
+# globals to retain chips totals from round to round. resets when game exits.
+# these get modified by player and dealer classes and replay() method.
+PLAYER_CHIPS = 200
+DEALER_CHIPS = 200
+PLAYER_HAS_NAME = False
+PLAYER_CURRENT_NAME = ''
+
 
 class MainWindow(qtw.QMainWindow):
-    # or whatever number not already taken--needed for app restart
+    """ Sets up the main windows gui """
+    # Set unique exit code used for app restart
     EXIT_CODE_REBOOT = -12345678
 
     def __init__(self, *args, **kwargs):
@@ -32,11 +40,14 @@ class MainWindow(qtw.QMainWindow):
         self.ui.icon1.setIconSize(qtc.QSize(80, 81))
         self.ui.icon2.setIcon(qtg.QIcon('ace2.png'))
         self.ui.icon2.setIconSize(qtc.QSize(80, 81))
+        self.ui.dealer_chips.setText(f'Chips: {DEALER_CHIPS}')
+        self.ui.player_chips.setText(f'Chips: {PLAYER_CHIPS}')
         self.show()
         self.play()
 
     def play(self):
-        # constants for card suits and ranks , obv.
+        """ Sets up the main components of the game, and deals first round """
+        global PLAYER_CURRENT_NAME, PLAYER_HAS_NAME
         self.SUITS = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
         self.RANKS = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
                       'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
@@ -45,9 +56,14 @@ class MainWindow(qtw.QMainWindow):
         self.TABLE_POT = 0
         self.next_card_slot_idx = 2
 
-        # get username
-        ask_name, bool1 = qtw.QInputDialog.getText(
-            self, 'Welcome!', 'Welcome to Black Jack 21!\nEnter your name Player: ')
+        # check for existing player name from previous round , if not then ask for one
+        if not PLAYER_HAS_NAME:
+            ask_name, bool1 = qtw.QInputDialog.getText(
+                self, 'Welcome!', 'Welcome to Black Jack 21!\nEnter your name Player: ')
+            PLAYER_CURRENT_NAME = ask_name
+            PLAYER_HAS_NAME = True
+        else:
+            ask_name = PLAYER_CURRENT_NAME
 
         # Setup deck,hands
         self.deck = Deck(self)
@@ -72,11 +88,15 @@ class MainWindow(qtw.QMainWindow):
         self.ui.enter_buttton.clicked.connect(self.make_bet)
 
     def make_bet(self):
-        # request bet, check avail chips...
+        """ Requests number of chips to bed from player, updates values, and text. """
 
         try:
             bet_amount = int(self.ui.bet_amount_edit.text())
             self.ui.player_textbox.setText('Enter Bet Amount ...')
+
+            print(f'Bet: {bet_amount}')
+            print(f'Human: {self.human_player.chips}')
+            print(f'Dealer: {self.dealer.chips}')
 
             if self.human_player.chips >= bet_amount and self.dealer.chips >= bet_amount:
                 self.TABLE_POT += self.human_player.bet_chips(bet_amount)
@@ -85,8 +105,8 @@ class MainWindow(qtw.QMainWindow):
                 self.ui.dealer_chips.setText(f'Chips: {self.dealer.chips}')
                 self.ui.player_chips.setText(
                     f'Chips: {self.human_player.chips}')
-                # self.ui.bet_amount_edit.setVisible(False)
-                # self.ui.enter_buttton.setVisible(False)
+                self.ui.bet_amount_edit.setVisible(False)
+                self.ui.enter_buttton.setVisible(False)
                 self.ui.bet_amount_edit.setEnabled(False)
                 self.ui.enter_buttton.setEnabled(False)
                 self.ui.player_textbox.setText('Hit or Hold?')
@@ -95,41 +115,40 @@ class MainWindow(qtw.QMainWindow):
 
             else:
                 self.ui.player_textbox.setText(
-                    'Not enough chips in the bank, try again.')
+                    'You or Dealer does not have enough chips!')
 
         except ValueError:
             self.ui.player_textbox.setText('Must be a number, try again.')
 
     def hit_me(self):
-
+        """ Deals one card per click of hit-me button for player """
         self.deck.deal_one(self.human_player)
 
-        if self.next_card_slot_idx == 2:
-            self.ui.player_card3.setText(
-                f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
-        if self.next_card_slot_idx == 3:
-            self.ui.player_card4.setText(
-                f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
-        if self.next_card_slot_idx == 4:
-            self.ui.player_card5.setText(
-                f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
-        if self.next_card_slot_idx == 5:
-            self.ui.player_card6.setText(
-                f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
-        self.next_card_slot_idx += 1
-
+        try:
+            if self.next_card_slot_idx == 2:
+                self.ui.player_card3.setText(
+                    f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
+            if self.next_card_slot_idx == 3:
+                self.ui.player_card4.setText(
+                    f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
+            if self.next_card_slot_idx == 4:
+                self.ui.player_card5.setText(
+                    f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
+            if self.next_card_slot_idx == 5:
+                self.ui.player_card6.setText(
+                    f'{self.human_player.hand_cards[self.next_card_slot_idx]}')
+        except IndexError:
+            self.next_card_slot_idx += 1
         self.ui.player_total.setText(
             f'Total: {self.human_player.total()}')
 
         if self.human_player.bust():
             self.ui.hit_me_button.setEnabled(False)
             self.ui.hold_button.setEnabled(False)
-            self.ui.player_total.setText(
-                f'Total: {self.human_player.total()}')
-            # self.ui.player_textbox.setText('Player Busts!!\nGame Over!')
             self.hold()
 
     def hold(self):
+        """ Deals one card for dealer as long as total value of cards in hand is < 17. """
         # sub loop, dealers turn, keep adding cards if total cards < 17
         self.ui.hit_me_button.setEnabled(False)
         self.ui.hold_button.setEnabled(False)
@@ -150,17 +169,15 @@ class MainWindow(qtw.QMainWindow):
             if self.next_card_slot_idx == 5:
                 self.ui.dealer_card6.setText(
                     f'{self.dealer.hand_cards[self.next_card_slot_idx]}')
-            self.next_card_slot_idx += 1
 
-            if self.dealer.bust():
-                self.ui.dealer_total.setText(
-                    f'Total: {self.dealer.total()}')
+            self.next_card_slot_idx += 1
         self.winner_is()
 
     def winner_is(self):
-        # determine winner, add chips to players total etc
-
+        """Determines Winner or Tie and prompts for replay"""
         # show dealer hidden card, and total including hidden card value
+        self.ui.player_total.setText(
+            f'Total: {self.human_player.total()}')
         self.ui.dealer_total.setText(
             f'Total: {self.dealer.total()}')
         self.ui.dealer_card1.setText(
@@ -204,7 +221,8 @@ class MainWindow(qtw.QMainWindow):
             self.ui.pot_total.setText(f'Pot: 0')
 
         QtTest.QTest.qWait(4000)
-        if self.human_player.chips == 0 or self.dealer.chips == 0:
+
+        if self.human_player.chips <= 0 or self.dealer.chips <= 0:
             self.ui.player_textbox.setText(
                 'One player out of chips\nGAME OVER.')
             QtTest.QTest.qWait(4000)
@@ -212,21 +230,24 @@ class MainWindow(qtw.QMainWindow):
         else:
             self.ui.hit_me_button.setEnabled(True)
             self.ui.hold_button.setEnabled(True)
-            self.ui.enter_buttton.setText(' ')
-            self.ui.bet_amount_edit.setText(' ')
+            self.ui.enter_buttton.setText('')
+            self.ui.bet_amount_edit.setText('')
             self.ui.player_textbox.setText(' Do you want to\nPlay again?')
             self.ui.hit_me_button.setText(' YES ')
             self.ui.hold_button.setText(' NO ')
+            # remove previous connect signal from buttons
+            self.ui.hit_me_button.disconnect()
+            self.ui.hold_button.disconnect()
+            # set new signals
             self.ui.hold_button.clicked.connect(exit)
             self.ui.hit_me_button.clicked.connect(self.replay)
 
     def replay(self):
+        """saves the round settings, and restarts app"""
+        global PLAYER_CHIPS, DEALER_CHIPS
+        PLAYER_CHIPS = self.human_player.chips
+        DEALER_CHIPS = self.dealer.chips
         app.exit(MainWindow.EXIT_CODE_REBOOT)  # needed for app restart
-        # del self.deck
-        # del self.dealer
-        # del self.human_player
-
-        # self.play()
 
 
 class Card():
@@ -245,7 +266,6 @@ class Deck:
     """ class for the whole card deck and its use. """
 
     def __init__(self, win_obj):
-
         self.all_cards = []
         for suit in win_obj.SUITS:
             for rank in win_obj.RANKS:
@@ -268,9 +288,11 @@ class Deck:
 class Player:
     """ class for the user. to hold cards and methods. """
 
+    global PLAYER_CHIPS
+
     def __init__(self, name, win_obj):
         self.name = name
-        self.chips = 100
+        self.chips = PLAYER_CHIPS
         self.hand_cards = []
 
     def add_chips(self, chips):
@@ -305,10 +327,11 @@ class Player:
 class Dealer:
     """ class for Dealer/ computer player, and its methods. """
 
-    def __init__(self):
+    global DEALER_CHIPS
 
+    def __init__(self):
         self.hand_cards = []
-        self.chips = 100
+        self.chips = DEALER_CHIPS
         self.name = 'Dealer'
 
     def add_chips(self, chips):
@@ -343,7 +366,6 @@ class Dealer:
 
     def __repr__(self):
         return self.name
-        GAME_ON = False
 
 
 if __name__ == '__main__':
@@ -354,9 +376,3 @@ if __name__ == '__main__':
         w = MainWindow()
         currentExitCode = app.exec_()
         app = None
-
-    # return currentExitCode
-
-    # app = qtw.QApplication(sys.argv)
-    # w = MainWindow()
-    # sys.exit(app.exec())
