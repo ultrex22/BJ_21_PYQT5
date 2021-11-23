@@ -217,7 +217,7 @@ class Ui_MainWindow(object):
         self.dealer_chips.setAlignment(QtCore.Qt.AlignCenter)
         self.dealer_chips.setObjectName("dealer_chips")
         self.player_chips = QtWidgets.QLabel(self.centralwidget)
-        self.player_chips.setGeometry(QtCore.QRect(360, 690, 101, 31))
+        self.player_chips.setGeometry(QtCore.QRect(360, 690, 111, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)

@@ -66,7 +66,7 @@ class MainWindow(qtw.QMainWindow):
         # check for existing player name from previous round , if not then ask for one
         if not PLAYER_HAS_NAME:
             ask_name, bool1 = qtw.QInputDialog.getText(
-                self, 'Welcome!', 'Welcome to Black Jack 21!\nWhat is your name?: ')
+                self, 'Welcome!', 'Welcome to Black Jack 21!\n    What is your name?: ')
             PLAYER_CURRENT_NAME = ask_name
             PLAYER_HAS_NAME = True
         else:
@@ -94,6 +94,8 @@ class MainWindow(qtw.QMainWindow):
             f'Total: {self.human_player.total()}')
         self.ui.dealer_total.setText(
             f'Total: {self.dealer.total_visible()}')
+        self.ui.player_textbox.setText(
+            'How many chips do you want to bet?')
         self.ui.enter_buttton.clicked.connect(self.make_bet)
 
     def make_bet(self):
@@ -101,7 +103,8 @@ class MainWindow(qtw.QMainWindow):
 
         try:
             bet_amount = int(self.ui.bet_amount_edit.text())
-            self.ui.player_textbox.setText('What is your bet?')
+            self.ui.player_textbox.setText(
+                'How many chips do you want to bet?')
 
             if self.human_player.chips >= bet_amount and self.dealer.chips >= bet_amount:
                 self.TABLE_POT += self.human_player.bet_chips(bet_amount)
@@ -192,7 +195,7 @@ class MainWindow(qtw.QMainWindow):
         # dealer busts, add pot chips to player
         if self.dealer.bust():
             self.ui.player_textbox.setText(
-                f'Dealer Busts.{self.human_player.name} Wins!')
+                f'Dealer Busts.\n{self.human_player.name} Wins!')
             self.human_player.add_chips(self.TABLE_POT)
 
         # player busts, add chips to dealer
