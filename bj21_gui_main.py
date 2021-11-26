@@ -16,10 +16,10 @@ from bj21_ui import Ui_MainWindow
 
 # globals to retain chips totals from round to round. resets when game exits.
 # these get modified by player and dealer classes and replay() method.
-PLAYER_CHIPS = 200
-DEALER_CHIPS = 200
-PLAYER_HAS_NAME = False
-PLAYER_CURRENT_NAME = ''
+GLOBAL_SETTINGS = {'PLAYER_CHIPS': 200,
+                   'DEALER_CHIPS': 200,
+                   'PLAYER_HAS_NAME': False,
+                   'PLAYER_CURRENT_NAME': ''}
 
 
 class MainWindow(qtw.QMainWindow):
@@ -43,16 +43,18 @@ class MainWindow(qtw.QMainWindow):
         self.move(frame_geo.topLeft())
 
         # set card icons
-        self.ui.icon1.setIcon(qtg.QIcon('ace1.png'))
+        self.ui.icon1.setIcon(qtg.QIcon('Static/Icons/ace1.png'))
         self.ui.icon1.setIconSize(qtc.QSize(90, 95))
-        self.ui.icon2.setIcon(qtg.QIcon('ace2.png'))
+        self.ui.icon2.setIcon(qtg.QIcon('Static/Icons/ace2.png'))
         self.ui.icon2.setIconSize(qtc.QSize(90, 95))
-        self.ui.dealer_chips.setText(f'Chips: {DEALER_CHIPS}')
-        self.ui.player_chips.setText(f'Chips: {PLAYER_CHIPS}')
+        self.ui.dealer_chips.setText(
+            f"Chips: {GLOBAL_SETTINGS['DEALER_CHIPS']}")
+        self.ui.player_chips.setText(
+            f"Chips: {GLOBAL_SETTINGS['PLAYER_CHIPS']}")
         self.show()
-        self.play()
+        self.game_on()
 
-    def play(self):
+    def game_on(self):
         """ Sets up the main components of the game, and deals first round """
         global PLAYER_CURRENT_NAME, PLAYER_HAS_NAME
         self.SUITS = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
@@ -64,13 +66,13 @@ class MainWindow(qtw.QMainWindow):
         self.next_card_slot_idx = 2
 
         # check for existing player name from previous round , if not then ask for one
-        if not PLAYER_HAS_NAME:
+        if not GLOBAL_SETTINGS["PLAYER_HAS_NAME"]:
             ask_name, bool1 = qtw.QInputDialog.getText(
                 self, 'Welcome!', 'Welcome to Black Jack 21!\n    What is your name?: ')
             PLAYER_CURRENT_NAME = ask_name
             PLAYER_HAS_NAME = True
         else:
-            ask_name = PLAYER_CURRENT_NAME
+            ask_name = GLOBAL_SETTINGS["PLAYER_CURRENT_NAME"]
 
         # Setup deck,hands
         self.deck = Deck(self)
@@ -96,9 +98,9 @@ class MainWindow(qtw.QMainWindow):
             f'Total: {self.dealer.total_visible()}')
         self.ui.player_textbox.setText(
             'How many chips do you want to bet?')
-        self.ui.enter_buttton.clicked.connect(self.make_bet)
+        self.ui.enter_buttton.clicked.connect(self.player_makes_bet)
 
-    def make_bet(self):
+    def player_makes_bet(self):
         """ Requests number of chips to bed from player, updates values, and text. """
 
         try:
@@ -116,8 +118,8 @@ class MainWindow(qtw.QMainWindow):
                 self.ui.bet_amount_edit.setEnabled(False)
                 self.ui.enter_buttton.setEnabled(False)
                 self.ui.player_textbox.setText('Hit or Hold?')
-                self.ui.hit_me_button.clicked.connect(self.hit_me)
-                self.ui.hold_button.clicked.connect(self.hold)
+                self.ui.hit_me_button.clicked.connect(self.players_turn)
+                self.ui.hold_button.clicked.connect(self.dealers_turn)
                 self.ui.hit_me_button.setEnabled(True)
                 self.ui.hold_button.setEnabled(True)
 
@@ -128,7 +130,7 @@ class MainWindow(qtw.QMainWindow):
         except ValueError:
             self.ui.player_textbox.setText('Must be a number, try again.')
 
-    def hit_me(self):
+    def players_turn(self):
         """ Deals one card per click of hit-me button for player """
         self.deck.deal_one(self.human_player)
 
@@ -153,9 +155,9 @@ class MainWindow(qtw.QMainWindow):
         if self.human_player.bust():
             self.ui.hit_me_button.setEnabled(False)
             self.ui.hold_button.setEnabled(False)
-            self.hold()
+            self.dealers_turn()
 
-    def hold(self):
+    def dealers_turn(self):
         """ Deals one card for dealer as long as total value of cards in hand is < 17. """
         # sub loop, dealers turn, keep adding cards if total cards < 17
         self.ui.hit_me_button.setEnabled(False)
@@ -180,9 +182,9 @@ class MainWindow(qtw.QMainWindow):
                     f'{self.dealer.hand_cards[self.next_card_slot_idx]}')
 
             self.next_card_slot_idx += 1
-        self.winner_is()
+        self.end_game()
 
-    def winner_is(self):
+    def end_game(self):
         """Determines Winner or Tie and prompts player for replay"""
         # show dealer hidden card, and total including hidden card value
         self.ui.player_total.setText(
@@ -247,9 +249,9 @@ class MainWindow(qtw.QMainWindow):
 
     def replay(self):
         """saves the round settings, and restarts newApp"""
-        global PLAYER_CHIPS, DEALER_CHIPS
-        PLAYER_CHIPS = self.human_player.chips
-        DEALER_CHIPS = self.dealer.chips
+        # global PLAYER_CHIPS, DEALER_CHIPS
+        GLOBAL_SETTINGS['PLAYER_CHIPS'] = self.human_player.chips
+        GLOBAL_SETTINGS["DEALER_CHIPS"] = self.dealer.chips
         newApp.exit(MainWindow.EXIT_CODE_REBOOT)  # needed for newApp restart
 
 
@@ -289,13 +291,13 @@ class Deck:
 
 
 class Player:
-    """ class for the user. to hold cards and methods. """
+    """ class for the user. to dealers_turn cards and methods. """
 
-    global PLAYER_CHIPS
+    # global PLAYER_CHIPS
 
     def __init__(self, name):
         self.name = name
-        self.chips = PLAYER_CHIPS
+        self.chips = GLOBAL_SETTINGS['PLAYER_CHIPS']
         self.hand_cards = []
 
     def add_chips(self, chips):
@@ -330,11 +332,11 @@ class Player:
 class Dealer:
     """ class for Dealer/ computer player, and its methods. """
 
-    global DEALER_CHIPS
+    # global DEALER_CHIPS
 
     def __init__(self):
         self.hand_cards = []
-        self.chips = DEALER_CHIPS
+        self.chips = GLOBAL_SETTINGS["DEALER_CHIPS"]
         self.name = 'Dealer'
 
     def add_chips(self, chips):
